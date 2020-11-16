@@ -39,7 +39,7 @@ prime_parser.add_argument('prime_integer', help='Returns a true or false', actio
 
 #keyval 
 keyval_parser = subparsers.add_parser('keyval', help='Use this to control the Redis Keyvals. Enter a key value then chose an option: -post, -get, -put, -delete')
-keyval_parser.add_argument('keyval_parser', action='store', help='The Keyval thing')
+#keyval_parser.add_argument('keyval_parser', action='store', help='The Keyval thing')
 keyval_parser.add_argument('-post', help='This writes a new key-value pair')
 keyval_parser.add_argument('-get', help='This to retrieve the value')
 keyval_parser.add_argument('-put', help='This overwrite the value on an existing key')
