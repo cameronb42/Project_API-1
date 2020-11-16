@@ -10,12 +10,11 @@ parser = argparse.ArgumentParser(
                               ~ Group 1 Tool Commands ~
 			       -----------------------
         Choose one of the following! If you need help please type -> python3 cli.py -h
-
 			       md5 - use: md5 -> string
-			   factorial - use: factorial -> num
-			   fibonacci - use: fibonacci -> num
-			    is-prime - use: is-prime -> num
-			kyeval - use: keyval-Redis_options -> string'''))
+			   factorial - use: factorial num
+			   fibonacci - use: fibonacci num
+			    is-prime - use: is-prime num
+			keyval - use: keyval-Redis_options string'''))
 			
 parser.print_help()
 
@@ -66,23 +65,22 @@ def prime(user_int):
     prime=requests.get(f'http://{HOST}/is-prime/{user_int}')
     print(prime.text)
 
-def keyval(user_str):
-    if args.cli == 'keyval':
-        if args.cli == '-post':
-            input_keystr = args.keyval_parser
-            r=requests.get(f'http://{HOST}/POST/{user_str}')
-            print(r.text)
-        if args.cli == '-get':
-            input_keystr = args.keyval_parser
-            r=requests.get(f'http://{HOST}/GET/{user_str}')
-        if args.cli == 'put':
-            input_keystr = args.keyval_parser
-            r=requests.get(f'http://{HOST}/PUT/{user_str}')
-        if args.cli == '-delete':
-            input_keystr = args.keyval_parser
-            r=requests.get(f'http://{HOST}/DELETE/{user_str}')
-        else:
-            print('Specify the Redis command you want to use')
+def keyvalpost(user_str):
+    keyvalpost=requests.get(f'http://{HOST}/POST/{user_str}')
+    print(keyvalpost.text)
+
+def keyvalget(user_str):
+    keyvalget=requests.get(f'http://{HOST}/GET/{user_str}')
+    print(keyvalget.text)
+
+def keyvalput(user_str):
+    keyvalput=requests.get(f'http://{HOST}/PUT/{user_str}')
+    print(keyvalput.text)
+
+def keyvaldelete(user_str):
+    keyvaldelete=requests.get(f'http://{HOST}/DELETE/{user_str}')
+    print(keyvaldelete.text)
+
 
 
 
@@ -97,3 +95,15 @@ if args.cli == 'fibonacci':
 
 if args.cli == 'is-prime':
     prime(args.prime_integer)
+
+if args.cli == '-post':
+    keyvalpost(args.keyval_parser)
+
+if args.cli == '-get':
+    keyvalget(args.keyval_parser)
+
+if args.cli == '-put':
+    keyvalput(args.keyval_parser)
+
+if args.cli == '-delete':
+    keyvaldelete(args.keyval_parser)
