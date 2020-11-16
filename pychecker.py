@@ -1,185 +1,177 @@
 import requests
 
-HOST = "http://34.121.122.205:5000"
+HOST = "http://34.121.122.205"
+
+#Testing dictionaries of each endpoint
+keyval_tests = {
+    "foo": "bar",
+    "hello": "world",
+    "test": "test3"
+}
+
+md5_tests = {
+    "test": "098f6bcd4621d373cade4e832627b4f6",
+    "testtesttest": "1fb0e331c05a52d5eb847d6fc018320d",
+    "tester": "f5d1278e8109edd94e1e4197e04873b9"
+}
+
+prime_tests = {
+    8: False,
+    6: False,
+    2: True
+}
+
+fibonacci_tests = {
+    56: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55],
+    18: [0, 1, 1, 2, 3, 5, 8, 13],
+    10: [0, 1, 1, 2, 3, 5, 8]
+}
+
+factorial_tests = {
+    4: 24,
+    5: 120,
+    9: 362880
+}
 
 
-#----------------Here is the new script---------------------
+#For test calculations
+all_tests = 0
+correct_tests = 0
 
-#Calculated final testing
-errors= 0
-successful_tests= 0
-all_tests = 19
 
-#Keyval tests
-print("Beginning Keyval Tests!")
-
-#GET
-def keyvalGET():
-    total = {'/keyval/test1':'test1'}
-    for path, result in total.items():
-        keyvalGET=requests.get(f'http://{HOST}{path}')
-        if keyvalGET.status_code == 200:
-            value = keyvalGET.json()['key']
-            if value == result:
-                successful_tests +=1
-                print("Success, keyval GET is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, keyval GET is wrong")
-        else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(keyvalGET.status_code))
-
-#POST           
-def keyvalPOST():
-    jeep = 'jeep2'
-    escape = 'escape'
-    data = {'key':jeep, 'value':escape} 
-    keyvalPOST=requests.post(f'http://{HOST}/keyval',json=data) 
-    if keyvalPOST.status_code == 200:
-        value = keyvalPOST.json()['key']
-        if value == jeep:
-            successful_tests +=1
-            print("Success, keyval POST is correct!")
-        else:
-            error +=1
-            print("Unsuccessful, keyval POST is wrong") 
+#Starting keyval testing with for loops and response codes
+print("\t\tLaunching keyval tests!")
+for a in keyval_tests.keys():
+    all_tests += 1
+    r = requests.post(HOST + "/keyval/" + str(a) + "/" + str(keyval_tests[a]))
+    print("Post Key: ", str(a), " to ", str(keyval_tests[a]))
+    if r.status_code == 200:
+        correct_tests += 1
+        print("Test Passed!")
     else:
-        error +=1
-        print("Unsuccessful, this is the response code ", str(keyvalPOST.status_code))
+        print("Test Failed- response code ", str(r.status_code))
 
-#DELETE
-def keyvalDELETE():
-    jeep = 'jeep2'
-    escape = 'escape3'
-    keyvalDELETE=requests.delete(f'http://{HOST}/keyval/jeep2') 
-        if keyvalDELETE.status_code == 200:
-            value = keyvalDELETE.json()['result']
-            if value == True:
-                successful_tests +=1
-                print("Success, keyval DELETE is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, keyval DELETE is wrong") 
+for a in keyval_tests.keys():
+    all_tests += 1
+    r = requests.get(HOST + "/keyval/" + str(a))
+    right = keyval_tests[a]
+    print("Get Key: ", str(a), ", anticipating ", str(right))
+    if r.status_code == 200:
+        v = r.json()["value"]
+        if v == str(right):
+            correct_tests += 1
+            print("Test Passed!")
         else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(keyvalDELETE.status_code)) 
+            print("Test Failed- retrieved this value ", str(v), " instead of ", str(right))
+    else:
+        print("Test Failed- response code ", str(r.status_code))
 
-#PUT
-def keyvalPUT():
-    jeep = 'jeep2'
-    escape = 'escape3'
-    data = {'key':jeep, 'value':escape}  
-    keyvalPUT=requests.put(f'http://{HOST}/keyval', json=data) 
-        if keyvalPOST.status_code == 200:
-            value = keyvalPUT.json()['value']
-            if value == escape:
-                successful_tests +=1
-                print("Success, keyval PUT is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, keyval PUT is wrong") 
+for a in keyval_tests.keys():
+    all_tests += 1
+    r = requests.delete(HOST + "/keyval/" + str(a))
+    print("Delete Key: ", str(a))
+    if r.status_code == 200:
+        correct_tests += 1
+        print("Test Passed!")
+    else:
+        print("Test Failed- response code ", str(r.status_code))
+
+
+#Starting md5 testing 
+print("\t\tLaunching md5 tests!")
+for a in md5_tests.keys():
+    all_tests += 1
+    r = requests.get(HOST + "/md5/" + str(a))
+    right = md5_tests[a]
+    print("Value is ", str(a), ", anticipating ", str(right))
+    if r.status_code == 200:
+        v = r.json()["output"]
+        if v == right:
+            correct_tests += 1
+            print("Test Passed!")
         else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(keyvalPUT.status_code))
+            print("Test Failed- retrieved this value ", str(v), " instead of ", str(right))
+    else:
+        print("Test Failed- response code ", str(r.status_code))
 
 
-#md5 testing
-print("Beginning md5 Test!")
-def md5():
-    total = {'/md5/test': '098f6bcd4621d373cade4e832627b4f6', '/md5/testtesttest': '1fb0e331c05a52d5eb847d6fc018320d', '/md5/tester': 'f5d1278e8109edd94e1e4197e04873b9'}
-    for path, result in total.items():
-        md5=requests.get(f'http://{HOST}{path}')
-        if md5.status_code == 200:
-            value=md5.json()['output']
-            if value == result:
-                successful_tests +=1
-                print("Success, md5 is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, md5 is wrong")
+#Starting prime testing
+print("\t\tLaunching prime tests!")
+for a in prime_tests.keys():
+    all_tests += 1
+    r = requests.get(HOST + "/is-prime/" + str(a))
+    right = prime_tests[a]
+    print("Prime of ", str(a), ", expecting ", str(right))
+    if r.status_code == 200:
+        v = r.json()["output"]
+        if v == right:
+            correct_tests += 1
+            print("Test Passed!")
         else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(md5.status_code))
+            print("Test Failed- retrieved this value ", str(v), " instead of ", str(right))
+    else:
+        print("Test Failed- response code ", str(r.status_code))
 
 
-#Is-Prime testing
-print("Beginnning Prime Tests!")
-def prime():
-    total = {'/is-prime/8': 'False', '/is-prime/2': 'True', '/is-prime/6': 'False'}
-    for path, result in total.items():
-        prime =requests.get(f'http://{HOST}{path}')
-        if prime.status_code == 200:
-            value=prime.json()['output']
-            if value == result:
-                successful_tests +=1
-                print("Success, is-prime is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, is-prime is wrong")
+#Starting factorial testing
+print("\t\tLaunching factorial tests!")
+for a in factorial_tests.keys():
+    all_tests += 1
+    r = requests.get(HOST + "/factorial/" + str(a))
+    right = factorial_tests[a]
+    print("Factorial of ", str(a), ", expecting ", str(right))
+    if r.status_code == 200:
+        v = r.json()["output"]
+        if v == right:
+            correct_tests += 1
+            print("Test Passed!")
         else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(prime.status_code))
+            print("Test Failed- retrieved this value ", str(v), " instead of ", str(right))
+    else:
+        print("Test Failed- response code ", str(r.status_code))
 
 
-#Factorial testing
-print("Beginning Factorial Test!")
-def factorial():
-    total = {'/factorial/4': 24, '/factorial/5': 120, '/factorial/9': 362880}
-    for path, result in total.items():
-        factorial=requests.get(f'http://{HOST}{path}')
-        if factorial.status_code == 200:
-            value=factorial.json()['output']
-            if value == result:
-                successful_tests +=1
-                print("Success, factorial is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, factorial is wrong")
+#Starting fibonacci sequence testing
+print("\t\tLaunching fibonacci tests!")
+for a in fibonacci_tests.keys():
+    all_tests += 1
+    r = requests.get(HOST + "/fibonacci/" + str(a))
+    right = fibonacci_tests[a]
+    print("Fibonacci sequence until ", str(a), ", anticipating ", str(right))
+    if r.status_code == 200:
+        v = r.json()["output"]
+        if v == right:
+            correct_tests += 1
+            print("Test Passed!")
         else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(factorial.status_code))
+            print("Test Failed- retrieved this value ", str(v), " instead of ", str(right))
+    else:
+        print("Test Failed- response code ", str(r.status_code))
 
 
-#Fibonacci testing
-print("Beginning Fibonacci Test!")
-def fibonacci():
-    total = {'/fibonacci/10': '[0,1,1,2,3,5,8]', '/fibonacci/18': '[0,1,1,2,3,5,8,13]', '/fibonacci/56': '[0,1,1,2,3,5,8,13,21,34,55]'}
-    for path, result in total.items():
-        fibonacci=requests.get(f'http://{HOST}{path}')
-        if fibonacci.status_code == 200:
-            value=fibonacci.json()['output']
-            if value == result:
-                successful_tests +=1
-                print("Success, fibonacci is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, fibonacci is wrong")
-        else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(fibonacci.status_code))
+#Starting slack-alert testing
+print("\t\tLaunching slack tests!")
+all_tests += 1
+r1 = requests.get(HOST + "/slack-alert/Hello.")
+all_tests += 1
+r2 = requests.get(HOST + "/slack-alert/This%20Is%20A%20Longer%20String")
+if r1.status_code == 200 and r2.status_code == 200:
+    print("Test Passed! Both messages posted.")
+    correct_tests += 2
+else:
+    if r1.status_code != 200:
+        print("Message 'Hello.' could not post to channel- response code: ", str(r1.status_code))
+    else:
+        correct_tests += 1
+
+    if r2.status_code != 200:
+        print("\nMessage 'This Is A Longer String' could not post to channel- response code: ", str(r2.status_code))
+    else:
+        correct_tests += 1
+    print("Test Failed!")
 
 
-#Slack testing
-print("Beginning Slack Test!")
-def slackalert():
-    total = {'/slack-alert/testing': 'Message sent and posted successfully to Slack channel', '/slack-alert/Hello%20World': 'Message sent and posted successfully to Slack channel', '/slack-alert/This%20Is%20A%20Big%20String.': 'Message sent and posted successfully to Slack channel'}
-    for path, result in total.items():
-        slackalert=requests.get(f'http://{HOST}{path}')
-        if slackalert.status_code == 200:
-            value=slackalert.json()['message']
-            if value == result:
-                successful_tests +=1
-                print("Success, slack-alert is correct!")
-            else:
-                error +=1
-                print("Unsuccessful, slack-alert is wrong")
-        else:
-            error +=1
-            print("Unsuccessful, this is the response code ", str(slackalert.status_code))
-
-
-
-#Calculating final scores
-print("Errors found: ", str(errors), "Successful tests: ", str(successful_tests), "out of ", str(all_tests))
-print("Total grade is: ", str((successful_tests / all_tests)*100), "%" )
+#Final test calculations of all tests
+print("\nCorrect tests: ", str(correct_tests))
+print("All tests: ", str(all_tests))
+print("Total: ", str((correct_tests / all_tests)*100))
