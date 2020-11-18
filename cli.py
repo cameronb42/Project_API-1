@@ -3,18 +3,19 @@ import sys
 import argparse
 import textwrap
 
-HOST = "34.121.122.205"
+#HOST = "34.121.122.205"
+HOST = "34.70.63.106"
 
 parser = argparse.ArgumentParser( 
     formatter_class=argparse.RawDescriptionHelpFormatter,description=textwrap.dedent('''
                               ~ Group 1 Tool Commands ~
 			       -----------------------
         Choose one of the following! If you need help please type -> python3 cli.py -h
-			       md5 - use: md5 -> string
+			       md5 - use: md5 string
 			   factorial - use: factorial num
 			   fibonacci - use: fibonacci num
 			    is-prime - use: is-prime num
-			keyval - use: keyval-Redis_options string'''))
+			keyval - use: keyval -Redis_options string'''))
 			
 parser.print_help()
 
@@ -40,10 +41,10 @@ prime_parser.add_argument('prime_integer', help='Returns a true or false', actio
 #keyval 
 keyval_parser = subparsers.add_parser('keyval', help='Use this to control the Redis Keyvals. Enter a key value then chose an option: -post, -get, -put, -delete')
 #keyval_parser.add_argument('keyval_parser', action='store', help='The Keyval thing')
-keyval_parser.add_argument('-post', help='This writes a new key-value pair')
-keyval_parser.add_argument('-get', help='This to retrieve the value')
-keyval_parser.add_argument('-put', help='This overwrite the value on an existing key')
-keyval_parser.add_argument('-delete', help='Use to delete key (and value) supplied')
+keyval_parser.add_argument('-post', dest='keypost', help='This writes a new key-value pair')
+keyval_parser.add_argument('-get',dest='keyget', help='This to retrieve the value')
+keyval_parser.add_argument('-put',dest='keyput', help='This overwrite the value on an existing key')
+keyval_parser.add_argument('-delete', dest='keydelete', help='Use to delete key (and value) supplied')
 
 
 args = parser.parse_args()
@@ -65,20 +66,26 @@ def prime(user_int):
     prime=requests.get(f'http://{HOST}/is-prime/{user_int}')
     print(prime.text)
 
+
 def keyvalpost(user_str):
-    keyvalpost=requests.get(f'http://{HOST}/POST/{user_str}')
+    print(f'http://{HOST}/keyval')
+    parts = user_str.split('=')
+    data = {'key':parts[0], 'value':parts[1]}
+    keyvalpost=requests.post(f'http://{HOST}/keyval', json=data)
     print(keyvalpost.text)
 
 def keyvalget(user_str):
-    keyvalget=requests.get(f'http://{HOST}/GET/{user_str}')
+    keyvalget=requests.get(f'http://{HOST}/keyval/{user_str}')
     print(keyvalget.text)
 
 def keyvalput(user_str):
-    keyvalput=requests.get(f'http://{HOST}/PUT/{user_str}')
+    parts = user_str.split('=')
+    data = {'key':parts[0], 'value':parts[1]}
+    keyvalput=requests.put(f'http://{HOST}/keyval', json=data)
     print(keyvalput.text)
 
 def keyvaldelete(user_str):
-    keyvaldelete=requests.get(f'http://{HOST}/DELETE/{user_str}')
+    keyvaldelete=requests.delete(f'http://{HOST}/keyval/{user_str}')
     print(keyvaldelete.text)
 
 
@@ -96,14 +103,15 @@ if args.cli == 'fibonacci':
 if args.cli == 'is-prime':
     prime(args.prime_integer)
 
-if args.cli == '-post':
-    keyvalpost(args.keyval_parser)
+if args.cli == 'keyval':
+    if args.keypost:
+        keyvalpost(args.keypost)
 
-if args.cli == '-get':
-    keyvalget(args.keyval_parser)
+    if args.keyget:
+        keyvalget(args.keyget)
 
-if args.cli == '-put':
-    keyvalput(args.keyval_parser)
+    if args.keyput:
+        keyvalput(args.keyput)
 
-if args.cli == '-delete':
-    keyvaldelete(args.keyval_parser)
+    if args.keydelete:
+        keyvaldelete(args.keydelete)
