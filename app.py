@@ -21,8 +21,7 @@ def index():
 
 #--------------Project 6 Continuation Redis--------------#
 #Adding the Redis port
-red = redis.Redis(host='redis', port=6379, db=0)
-
+redis = redis.Redis(host='redis', port=6379, db=0)
 
 @app.route('/keyval', methods=['POST'])
 def test4():
@@ -127,8 +126,11 @@ def key_value_delete(key):
 @app.route('/get', methods=['GET'])
 def test2():
     return jsonify({'message' : 'It works!'})
-
-	
+    
+#@app.route('/clear', methods=['GET'])
+#def clear_data():
+ #r.flushall()
+ #return "All Keys/Value pairs Removed"
 #--------------md5 hash converter--------------#
 @app.route('/md5/<string:input>', methods=['GET'])
 def get_md5(input):
