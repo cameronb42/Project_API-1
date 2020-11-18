@@ -1,6 +1,7 @@
 import requests
 
-HOST = "http://34.121.122.205"
+HOST = "http://34.70.63.106"
+
 
 #For test calculations
 all_tests = 0
@@ -36,9 +37,17 @@ fibonacci_tester = {
 
 
 #Starting keyval testing with for loops and response codes
-for a in keyval_tester.keys():
+for k,v in keyval_tester.items():
     all_tests += 1
-    r = requests.post(HOST + "/keyval/" + str(a) + "/" + str(keyval_tester[a]))
+    # The URL that is created here, and is being passed into the .post() method is not valid
+    #    Here is what you are passing: http://1.2.3.4/keyval/some_str/another_str
+    # But that is not a valid endpoint in the API that was defined
+    # the POST action is for CREATING new keys, and it takes a JSON payload, remember?
+    #r = requests.post(HOST + "/keyval/" + str(a) + "/" + str(keyval_tester[a]))
+
+    # it will need to look like this:
+    r = requests.post(HOST + "/keyval", json={'key':k, 'value':v} )
+
     if r.status_code == 200:
         correct_tests += 1
         print("Test POST Passed!")
