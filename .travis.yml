@@ -4,8 +4,8 @@ services:
     -docker
     
 before_install:
-    -cd Project_5
-    -cd apidemo
+    #-cd Project_5
+    #-cd apidemo
     -docker build -t lie6055/project_api:22 .
     -docker-compose up -d
     -docker ps
