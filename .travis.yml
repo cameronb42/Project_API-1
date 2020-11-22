@@ -1,0 +1,20 @@
+language: python
+
+services:
+    -docker
+    
+before_install:
+    -cd Project_5
+    -cd apidemo
+    -docker build -t lie6055/project_api:22 .
+    -docker-compose up -d
+    -docker ps
+    
+script:
+    #First test the API
+    -docker run lie6055/project_api:22
+    
+after_success:
+    #Push the API image back to Docker Hub
+    -docker login -u $D_USERNAME -p $D_PASSWORRD
+    -docker push lie6055/project_api
