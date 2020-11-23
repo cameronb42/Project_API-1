@@ -7,7 +7,7 @@ services:
 
 before_install:
     - docker pull lie6055/api:22 
-    - docker run lie6055/api:22
+    - docker run lie6055/api
     - docker ps -a
 
 #NOT SURE IF THIS IS NEEDED 
