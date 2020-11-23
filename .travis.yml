@@ -7,15 +7,15 @@ services:
 
 before_install:
     - docker pull lie6055/api:22 
-    - docker-compose up -d
-    - docker ps 
+    - docker-run lie6055/api:22
+    - docker ps -a
 
 #NOT SURE IF THIS IS NEEDED 
 #before_script: pip install docker-compose
 
-aftersuccess: 
-    - docker login -u #username -p password
-    - docker push lie6055/api 
+#aftersuccess: 
+   # - docker login -u #username -p password
+   # - docker push lie6055/api 
 script:
     - docker run lie6055/api:22
     
