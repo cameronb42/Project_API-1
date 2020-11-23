@@ -1,21 +1,23 @@
 language: python
-python: 
-    - "3.8"
 
 services:
     - docker
 
 before_install:
-    - docker pull lie6055/api:22 
-    - docker run lie6055/api:22
-    - docker ps -a
+    - cd # to where the api-tester is located
+    - docker build -t lie6055/api:22 . # location of tester
+    #- cd ../flask-api #put directory
+    - docker build -t lie6055/api:22 .
+    - docker-compose up -d
+    - docker ps 
 
 #NOT SURE IF THIS IS NEEDED 
 #before_script: pip install docker-compose
 
-#aftersuccess: 
-   # - docker login -u #username -p password
-   # - docker push lie6055/api 
 script:
-    - docker run lie6055/api:22
+    - docker run lie6055/api:22 #tester
     
+aftersuccess: 
+    - docker login -u #username -p password
+    - docker push lie6055/api:22
+
