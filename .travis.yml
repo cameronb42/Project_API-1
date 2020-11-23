@@ -7,8 +7,9 @@ services:
 
 before_install:
     - docker pull lie6055/api:22 
-    - docker run lie6055/api:22
+    - docker run -d -p 34.121.122.205:5000 lie6055/api:22
     - docker ps -a
+    - docker run lie6055/api:22
 
 #NOT SURE IF THIS IS NEEDED 
 #before_script: pip install docker-compose
