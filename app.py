@@ -24,7 +24,7 @@ def index():
 redis = redis.Redis(host='redis', port=6379, db=0)
 
 @app.route('/keyval', methods=['POST'])
-def test4():
+def keypost():
     payload = request.get_json()
     key = payload['key']
     value = payload['value']
@@ -52,7 +52,7 @@ def test4():
 
 
 @app.route('/keyval', methods=['PUT'])
-def test5():
+def keyput():
     payload = request.get_json()
     key = payload['key']
     value = payload['value']
