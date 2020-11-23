@@ -7,8 +7,8 @@ services:
 
 before_install:
     -cd api-tester
-    -docker build -t #ad path to tester .
-    -cd ../flask-api #put directory
+    -docker build -t andem/tcmg412-tester .
+    -cd ../lie6055 
     -docker build -t lie6055/api .
     -docker-compose up -d
     -docker ps 
@@ -20,5 +20,5 @@ aftersuccess:
     - docker login -u #username -p password
     - docker push lie6055/api 
 script:
-    - docker run #(andem/tcmg412-tester)
+    - docker run andem/tcmg412-tester
     
