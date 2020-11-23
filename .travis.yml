@@ -7,7 +7,7 @@ services:
 
 before_install:
     - docker build -t lie6055/api:22 .
-    - docker-compose up -d
+    #- docker-compose up -d
     - docker ps 
 
 #NOT SURE IF THIS IS NEEDED 
