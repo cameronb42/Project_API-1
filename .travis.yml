@@ -1,5 +1,24 @@
 language: python
+python: 
+    - "3.8"
 
 services:
-    -docker
+    - docker
+
+before_install:
+    -cd api-tester
+    -docker build -t #ad path to tester .
+    -cd ../flask-api #put directory
+    -docker build -t jray6055/Project_API .
+    -docker-compose up -d
+    -docker ps 
+
+#NOT SURE IF THIS IS NEEDED 
+#before_script: pip install docker-compose
+
+aftersuccess: 
+    - docker login -u #username -p password
+    - docker push jray6055/Project_API 
+script:
+    - docker run #(andem/tcmg412-tester)
     
