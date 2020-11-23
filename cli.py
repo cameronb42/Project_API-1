@@ -3,8 +3,8 @@ import sys
 import argparse
 import textwrap
 
-#HOST = "34.121.122.205"
-HOST = "34.70.63.106"
+HOST = "34.121.122.205"
+#HOST = "34.70.63.106"
 
 parser = argparse.ArgumentParser( 
     formatter_class=argparse.RawDescriptionHelpFormatter,description=textwrap.dedent('''
