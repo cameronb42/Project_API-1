@@ -7,7 +7,7 @@ services:
 
 before_install:
     -cd api-tester
-    -docker build -t andem/tcmg412-tester .
+    -docker build -t lie6055/api:22 .
     -cd ../lie6055 
     -docker build -t lie6055/api .
     -docker-compose up -d
@@ -20,5 +20,5 @@ aftersuccess:
     - docker login -u #username -p password
     - docker push lie6055/api 
 script:
-    - docker run andem/tcmg412-tester
+    - docker run lie6055/api:22
     
