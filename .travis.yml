@@ -6,6 +6,9 @@ services:
     - docker
 
 before_install:
+    - cd api-tester
+    - docker build -t andem/tcmg412-tester .
+    - cd ../lie6055
     - docker build -t lie6055/api:22 .
     - docker-compose up -d
     - docker ps 
@@ -13,9 +16,9 @@ before_install:
 #NOT SURE IF THIS IS NEEDED 
 #before_script: pip install docker-compose
 
-aftersuccess: 
-    - docker login -u #username -p password
-    - docker push lie6055/api 
+#aftersuccess: 
+    #- docker login -u #username -p password
+    #- docker push lie6055/api 
 script:
     - docker run lie6055/api:22
     
