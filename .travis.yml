@@ -7,7 +7,7 @@ services:
 
 before_install:
     -cd api-tester
-    -docker build -t lie6055/api:22 .
+    -docker pull lie6055/api:22 
     -cd ../lie6055 
     -docker build -t lie6055/api:22 .
     -docker-compose up -d
